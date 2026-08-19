@@ -14,15 +14,26 @@ const dbConfig = {
   },
 };
 
-async function connectToDatabase(): Promise<sql.ConnectionPool> {
-  try {
-    const pool = await sql.connect(dbConfig);
-    logger.success("Conexão com o banco de dados estabelecida com sucesso.");
-    return pool;
-  } catch (error) {
-    logger.error("Erro ao conectar ao banco de dados:");
-    throw error;
+let poolPromise: Promise<sql.ConnectionPool> | undefined;
+
+function connectToDatabase(): Promise<sql.ConnectionPool> {
+  if (!poolPromise) {
+    poolPromise = sql
+      .connect(dbConfig)
+      .then((pool) => {
+        logger.success(
+          "Conexão com o banco de dados estabelecida com sucesso.",
+        );
+        return pool;
+      })
+      .catch((error) => {
+        poolPromise = undefined;
+        logger.error("Erro ao conectar ao banco de dados:");
+        throw error;
+      });
   }
+
+  return poolPromise;
 }
 
 async function disconnectFromDatabase(pool: sql.ConnectionPool): Promise<void> {
@@ -48,7 +59,6 @@ export async function executeQuery(
       });
     }
     const result = await request.query(query);
-    await disconnectFromDatabase(pool);
     logger.success("Consulta executada com sucesso.");
     return result.recordset;
   } catch (error) {
