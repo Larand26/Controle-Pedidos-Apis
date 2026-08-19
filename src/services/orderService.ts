@@ -121,6 +121,7 @@ export async function changeOrderStatus(
         code: "INVALID_STATUS_ID",
       };
     }
+
     // Checa se o pedido existe
     const orderCheck = await getOrderById(orderId);
     if (!orderCheck.success || !orderCheck.data) {
@@ -134,7 +135,7 @@ export async function changeOrderStatus(
     if (orderCheck.data.ID_SITUACAO === newStatusID) {
       return {
         success: false,
-        message: "O pedido já possui o status especificado",
+        message: "O pedido já possui o status",
         code: "ORDER_ALREADY_HAS_STATUS",
       };
     }
@@ -157,23 +158,29 @@ export async function changeOrderStatus(
     if (!response.success) {
       return {
         success: false,
-        message: "Falha ao inserir o histórico do pedido",
+        message: "Falha ao inserir o histórico",
         code: "ORDER_HISTORY_INSERT_FAILED",
       };
     }
+
+    // 2. Calcula o tempo total de execução
+    const endTime = Date.now();
+    const startTime = new Date(orderCheck.data.CPVDataAlteracao).getTime();
+    const executionTimeMs = endTime - startTime;
 
     return {
       success: true,
       message: "Status do pedido alterado com sucesso",
       data: {
-        orderId,
-        newStatusID,
+        order: orderCheck.data.ID_Pedido,
+        newStatus: statusCheck.data.SIT_DESCRICAO,
+        time: executionTimeMs,
       },
     };
   } catch (error) {
     return {
       success: false,
-      message: "Falha ao alterar o status do pedido",
+      message: "Falha ao alterar o status",
       code: "ORDER_STATUS_CHANGE_FAILED",
       error,
     };
