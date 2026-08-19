@@ -30,6 +30,38 @@ async function getStatusById(
   }
 }
 
+async function getOrderById(
+  orderId: number,
+): Promise<ResponseSuccess | ResponseError> {
+  try {
+    const query = `
+        SELECT * 
+        FROM [CPV_PEDIDO]
+        WHERE [ID_NUMPEDORC] = @orderId
+    `;
+    const result = await executeQuery(query, { orderId });
+    if (result.length === 0) {
+      return {
+        success: false,
+        message: "Order not found",
+        code: "ORDER_NOT_FOUND",
+      };
+    }
+    return {
+      success: true,
+      message: "Order retrieved successfully",
+      data: result[0],
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to retrieve order",
+      code: "ORDER_RETRIEVAL_FAILED",
+      error,
+    };
+  }
+}
+
 export async function changeOrderStatus(
   orderId: number,
   newStatusID: number,
@@ -42,6 +74,15 @@ export async function changeOrderStatus(
         success: false,
         message: "Invalid status ID",
         code: "INVALID_STATUS_ID",
+      };
+    }
+    // Checa se o pedido existe
+    const orderCheck = await getOrderById(orderId);
+    if (!orderCheck.success || !orderCheck.data) {
+      return {
+        success: false,
+        message: "Order not found",
+        code: "ORDER_NOT_FOUND",
       };
     }
     // Muda o status do pedido no banco de dados
