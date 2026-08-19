@@ -17,13 +17,13 @@ async function getStatusById(
     const result = await executeQuery(query, { statusId });
     return {
       success: true,
-      message: "Status retrieved successfully",
+      message: "Status recuperado com sucesso",
       data: result[0],
     };
   } catch (error) {
     return {
       success: false,
-      message: "Failed to retrieve status",
+      message: "Falha ao recuperar o status",
       code: "STATUS_RETRIEVAL_FAILED",
       error,
     };
@@ -43,19 +43,19 @@ async function getOrderById(
     if (result.length === 0) {
       return {
         success: false,
-        message: "Order not found",
+        message: "Pedido não encontrado",
         code: "ORDER_NOT_FOUND",
       };
     }
     return {
       success: true,
-      message: "Order retrieved successfully",
+      message: "Pedido recuperado com sucesso",
       data: result[0],
     };
   } catch (error) {
     return {
       success: false,
-      message: "Failed to retrieve order",
+      message: "Falha ao recuperar o pedido",
       code: "ORDER_RETRIEVAL_FAILED",
       error,
     };
@@ -75,7 +75,7 @@ async function insertOrderHistory(
     if (!beforeStatus.success || !beforeStatus.data) {
       return {
         success: false,
-        message: "Failed to retrieve previous status",
+        message: "Falha ao recuperar o status anterior",
         code: "PREVIOUS_STATUS_RETRIEVAL_FAILED",
       };
     }
@@ -95,12 +95,12 @@ async function insertOrderHistory(
 
     return {
       success: true,
-      message: "Order history inserted successfully",
+      message: "Histórico do pedido inserido com sucesso",
     };
   } catch (error) {
     return {
       success: false,
-      message: "Failed to insert order history",
+      message: "Falha ao inserir o histórico do pedido",
       code: "ORDER_HISTORY_INSERT_FAILED",
       error,
     };
@@ -117,7 +117,7 @@ export async function changeOrderStatus(
     if (!statusCheck.success || !statusCheck.data) {
       return {
         success: false,
-        message: "Invalid status ID",
+        message: "ID de status inválido",
         code: "INVALID_STATUS_ID",
       };
     }
@@ -126,7 +126,7 @@ export async function changeOrderStatus(
     if (!orderCheck.success || !orderCheck.data) {
       return {
         success: false,
-        message: "Order not found",
+        message: "Pedido não encontrado",
         code: "ORDER_NOT_FOUND",
       };
     }
@@ -134,7 +134,7 @@ export async function changeOrderStatus(
     if (orderCheck.data.ID_SITUACAO === newStatusID) {
       return {
         success: false,
-        message: "Order already has the specified status",
+        message: "O pedido já possui o status especificado",
         code: "ORDER_ALREADY_HAS_STATUS",
       };
     }
@@ -157,14 +157,14 @@ export async function changeOrderStatus(
     if (!response.success) {
       return {
         success: false,
-        message: "Failed to insert order history",
+        message: "Falha ao inserir o histórico do pedido",
         code: "ORDER_HISTORY_INSERT_FAILED",
       };
     }
 
     return {
       success: true,
-      message: "Order status changed successfully",
+      message: "Status do pedido alterado com sucesso",
       data: {
         orderId,
         newStatusID,
@@ -173,7 +173,7 @@ export async function changeOrderStatus(
   } catch (error) {
     return {
       success: false,
-      message: "Failed to change order status",
+      message: "Falha ao alterar o status do pedido",
       code: "ORDER_STATUS_CHANGE_FAILED",
       error,
     };
