@@ -23,3 +23,15 @@ export async function connectToDatabase(): Promise<sql.ConnectionPool> {
     throw error;
   }
 }
+
+export async function disconnectFromDatabase(
+  pool: sql.ConnectionPool,
+): Promise<void> {
+  try {
+    await pool.close();
+    console.log("Conexão com o banco de dados encerrada com sucesso.");
+  } catch (error) {
+    console.error("Erro ao desconectar do banco de dados:", error);
+    throw error;
+  }
+}
