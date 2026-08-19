@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import routes from "./routes.js";
 
+import { verifyBearerToken } from "./middlewares/auth.middleware.js";
+
 const app = express();
 
 // Middlewares
@@ -13,6 +15,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(verifyBearerToken);
 
 // Routes configuration
 app.use("/api", routes);

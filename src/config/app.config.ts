@@ -4,6 +4,7 @@ dotenv.config();
 const appConfig = {
   api: {
     port: process.env.PORT || 3001,
+    secretToken: process.env.SECRET_TOKEN || "seu_token_secreto_aqui",
   },
   db: {
     host: process.env.SQLSERVER_HOST || "localhost",
