@@ -3,6 +3,10 @@ import type { Request, Response } from "express";
 
 import * as orderController from "./controllers/orderController.js";
 
+// middlewares
+import { validateRequest } from "./middlewares/validateRequest.middleware.js";
+import { updateOrderStatusSchema } from "./schemas/order.schema.js";
+
 const routes = Router();
 
 routes.get("/", (req: Request, res: Response) => {
@@ -11,6 +15,7 @@ routes.get("/", (req: Request, res: Response) => {
 
 routes.post(
   "/orders/:orderId/change-status",
+  validateRequest(updateOrderStatusSchema),
   orderController.changeOrderStatus,
 );
 
