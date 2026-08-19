@@ -86,6 +86,12 @@ export async function changeOrderStatus(
       };
     }
     // Muda o status do pedido no banco de dados
+    const query = `
+        UPDATE "CPV_Pedido"
+        SET "ID_SITUACAO" = @newStatusID
+        WHERE "ID_NUMPEDORC" = @orderId
+    `;
+    await executeQuery(query, { orderId, newStatusID });
     return {
       success: true,
       message: "Order status changed successfully",
