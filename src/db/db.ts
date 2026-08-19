@@ -35,10 +35,19 @@ async function disconnectFromDatabase(pool: sql.ConnectionPool): Promise<void> {
   }
 }
 
-export async function executeQuery(query: string): Promise<any> {
+export async function executeQuery(
+  query: string,
+  params?: Record<string, unknown>,
+): Promise<any> {
   try {
     const pool = await connectToDatabase();
-    const result = await pool.request().query(query);
+    const request = pool.request();
+    if (params) {
+      Object.keys(params).forEach((key) => {
+        request.input(key, params[key]);
+      });
+    }
+    const result = await request.query(query);
     await disconnectFromDatabase(pool);
     logger.success("Consulta executada com sucesso.");
     return result.recordset;
