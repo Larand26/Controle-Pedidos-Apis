@@ -7,7 +7,10 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "npx tsx watch src/server.ts",
-    "test": "tsc && node dist/tests/test.js"
+    "test": "tsc && node dist/tests/test.js",
+    "pm2-start": "npm run build && pm2 start ecosystem.config.cjs --env production",
+    "pm2-stop": "pm2 stop ecosystem.config.cjs",
+    "pm2-restart": "npm run build && pm2 reload ecosystem.config.cjs --env production"
   },
   "keywords": [],
   "author": "",
