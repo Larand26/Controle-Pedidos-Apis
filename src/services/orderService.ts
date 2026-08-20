@@ -167,7 +167,6 @@ export async function changeOrderStatus(
     // reduz 3h do new Date() para ajustar o fuso horário
     const endTime = new Date().getTime() - 3 * 60 * 60 * 1000;
     const startTime = orderCheck.data.CPVDataAlteracao.getTime();
-    console.log(orderCheck.data.CPVDataAlteracao, new Date());
     const executionTimeMs = startTime - endTime;
 
     return {
@@ -194,7 +193,7 @@ export async function getOrderStatus(): Promise<
 > {
   try {
     const query = `
-        SELECT *
+        SELECT [ID_SITUACAO] as id, [SIT_DESCRICAO] as description
         FROM [CPV_SITUACAO]
     `;
     const result = await executeQuery(query);
