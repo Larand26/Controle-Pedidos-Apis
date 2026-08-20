@@ -186,3 +186,27 @@ export async function changeOrderStatus(
     };
   }
 }
+
+export async function getOrderStatus(): Promise<
+  ResponseSuccess | ResponseError
+> {
+  try {
+    const query = `
+        SELECT *
+        FROM [CPV_SITUACAO]
+    `;
+    const result = await executeQuery(query);
+    return {
+      success: true,
+      message: "Status do pedido recuperados com sucesso",
+      data: result,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Falha ao recuperar os status do pedido",
+      code: "ORDER_STATUS_RETRIEVAL_FAILED",
+      error,
+    };
+  }
+}

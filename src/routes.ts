@@ -19,4 +19,6 @@ routes.post(
   orderController.changeOrderStatus,
 );
 
+routes.get("/orders/status", orderController.getOrderStatus);
+
 export default routes;
