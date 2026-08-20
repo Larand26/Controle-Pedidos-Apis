@@ -164,9 +164,11 @@ export async function changeOrderStatus(
     }
 
     // 2. Calcula o tempo total de execução
-    const endTime = Date.now();
-    const startTime = new Date(orderCheck.data.CPVDataAlteracao).getTime();
-    const executionTimeMs = endTime - startTime;
+    // reduz 3h do new Date() para ajustar o fuso horário
+    const endTime = new Date().getTime() - 3 * 60 * 60 * 1000;
+    const startTime = orderCheck.data.CPVDataAlteracao.getTime();
+    console.log(orderCheck.data.CPVDataAlteracao, new Date());
+    const executionTimeMs = startTime - endTime;
 
     return {
       success: true,
